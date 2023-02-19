@@ -20,4 +20,6 @@ Press F5 to open the terminal. This mod uses the below commands (also found by t
 Suggested usage: Use list locations to get the proper name for your desired location. Locate All to add them all to your map. Add a manual pin for the ones you're interested in visiting. Then Remove command to remove the mod added pins so only your manual ones are left over.
 
 
+1.0.2 - Updated output to print to terminal properly
+
 1.0.1 - Removed space characters from ID
