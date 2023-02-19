@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using BepInEx;
 using HarmonyLib;
@@ -10,13 +10,13 @@ using static ZoneSystem;
 using Unity.Collections.LowLevel.Unsafe;
 using System.Collections;
 
-namespace ValheimMapMod
+namespace LocateEverything
 {
-    [BepInPlugin("UniqueID.LocateEverything", "Valheim Map Mod", "1.0.0")]
+    [BepInPlugin("Valheim Locate Map Mod", "Locate Everything", "1.0.0")]
     [BepInProcess("valheim.exe")]
     public class ValheimMapMod : BaseUnityPlugin
     {
-        private readonly Harmony harmony = new Harmony("UniqueID.LocateEverything");
+        private readonly Harmony harmony = new Harmony("Valheim Locate Map Mod");
         public static List<ZoneLocation> test;
         public static ZoneSystem zs;
         public static Minimap mm;
@@ -68,11 +68,14 @@ namespace ValheimMapMod
 
 
                 String inputText = __instance.m_input.text.ToUpper();
-                if (inputText.Contains("MERCHANT"))
+                if (inputText.Contains("HELP"))
                 {
 
-                    Game.instance.DiscoverClosestLocation("Vendor_BlackForest", Player.m_localPlayer.transform.position, "Merchant", 8);
-
+                    Console.print("List Locations");
+                    Console.print("Locate Closest *location* ");
+                    Console.print("Locate All *location*");
+                    Console.print("Remove Everything Pins");
+                    Console.print("LOCATE EVERYTHING");
                 }
                 else if (inputText.Equals("LIST LOCATIONS"))
                 {
@@ -97,18 +100,18 @@ namespace ValheimMapMod
                 }
                 else if (inputText.Equals("LOCATE EVERYTHING"))
                 {
+
                     if(dict.Count() == 0)
                     {
                         Player.m_localPlayer.Message(MessageHud.MessageType.Center, "Please close and re-open this World to initialize Locations");
                         Console.print("Please close and re-open this World to initialize Locations");
                         return;
                     }
-                    LocationList zone = Game.instance.GetComponent<LocationList>();
 
-                    //Console.print("Dictionary Count" + dict.Count());
+                    Console.print("Locating all of these: " + dict.Count());
                     List<Vector3> ExistingPinPositions = new List<Vector3>();
-                    Minimap.PinData pinData = ((List<Minimap.PinData>)Traverse.Create((object)Minimap.instance).Field("m_pins").GetValue()).First((Minimap.PinData p) => p.m_type == pinType0 && p.m_name == "");
-                    List<Minimap.PinData> MiniMapPinData = (List<Minimap.PinData>)Traverse.Create((object)Minimap.instance).Field("m_pins").GetValue();
+                            
+                    List<Minimap.PinData> MiniMapPinData = (List<Minimap.PinData>)Traverse.Create((object)Minimap.instance).Field("m_pins").GetValue(); //No idea how Traverse works but it does the job
                     foreach (PinData pin in MiniMapPinData)
                     {
                         ExistingPinPositions.Add(pin.m_pos);
@@ -118,26 +121,46 @@ namespace ValheimMapMod
                     foreach (Vector2i LI in dict.Keys)
                     {
                         Vector3 LocationPos = dict[LI].m_position;
-                        Console.print(LI.ToString() + ", " + dict[LI] + ", " + LocationPos + ", " + dict[LI].m_location.m_prefabName);
+                        //Console.print(LI.ToString() + ", " + dict[LI] + ", " + LocationPos + ", " + dict[LI].m_location.m_prefabName);
 
                         if (!ExistingPinPositions.Contains(LocationPos))
                         {
-                            mm.AddPin(LocationPos, PinType.Icon0, dict[LI].m_location.m_prefabName, true, false);
-                            Console.print(" Pin Added");
+                            mm.AddPin(LocationPos, PinType.None, dict[LI].m_location.m_prefabName, true, false);
+                            Console.print(" Pin Added at, " + LocationPos);
                         }
                         else
                         {
-                            Console.print(" Pin Already Exists");
+                            //Console.print(" Pin Already Exists");
                         }
 
                     }
 
                     return;
                 }
+                else if (inputText.Equals("REMOVE EVERYTHING PINS"))
+                {
+                    Console.print("Start Removing");
+                    List<Minimap.PinData> MiniMapPinData = (List<Minimap.PinData>)Traverse.Create((object)Minimap.instance).Field("m_pins").GetValue(); //No idea how Traverse works but it does the job
+                    List<PinData> RemovablePins = new List<PinData>();
+                    foreach (PinData pin in MiniMapPinData)
+                    {
+                        if (pin.m_type == PinType.None)
+                        {
+                            RemovablePins.Add(pin);
+                        }
+                    }
+                    foreach (PinData pin in RemovablePins)
+                    {
+                        mm.RemovePin(pin);
+                    }
+                    Console.print("Finished Removing");
+                }
 
-                //either Locate ALL Mines 
-                // or    Locate Closest Mines
-                String[] SplitText = inputText.Split(' ');
+               // also add for th ehelp command
+
+                    //either Locate ALL Mines 
+                    // or    Locate Closest Mines
+                    String[] SplitText = inputText.Split(' ');
                 String PrefabName = SplitText[SplitText.Length - 1];
                 List<String> PrefabNamesListUpper = new List<String>();
                 List<String> OriginalPrefabNamesList = new List<String>();
@@ -161,7 +184,7 @@ namespace ValheimMapMod
                     if (closest)
                     {
                         Game.instance.DiscoverClosestLocation(OriginalPrefabName, Player.m_localPlayer.transform.position, OriginalPrefabName, 8);
-                        Console.print(" Finished Discovering Closest");
+                        Console.print(" Finished Discovering Closest.");
                     }
                     else if(all)
                     {
@@ -171,24 +194,18 @@ namespace ValheimMapMod
                             Console.print("Please close and re-open this World to initialize Locations");
                             return;
                         }
-
-                        Console.print("Locating...");
-                        LocationList zone = Game.instance.GetComponent<LocationList>();
-                        
                         List<Vector3> ExistingPinPositions = new List<Vector3>();
-                        Minimap.PinData pinData = ((List<Minimap.PinData>)Traverse.Create((object)Minimap.instance).Field("m_pins").GetValue()).First((Minimap.PinData p) => p.m_type == pinType0 && p.m_name == "");
                         List<Minimap.PinData> MiniMapPinData = (List<Minimap.PinData>)Traverse.Create((object)Minimap.instance).Field("m_pins").GetValue();
+
                         foreach (PinData pin in MiniMapPinData)
                         {
                             ExistingPinPositions.Add(pin.m_pos);
                         }
 
-                        
                         foreach (Vector2i LI in dict.Keys)
                         {
                             Vector3 LocationPos = dict[LI].m_position;
                             //Console.print(LI.ToString() + ", " + dict[LI] + ", " + LocationPos + ", " + dict[LI].m_location.m_prefabName);
-
                             if (!ExistingPinPositions.Contains(LocationPos) & dict[LI].m_location.m_prefabName.Equals(OriginalPrefabName))
                             {
                                 mm.AddPin(LocationPos, PinType.None, dict[LI].m_location.m_prefabName, true, false);
@@ -200,7 +217,7 @@ namespace ValheimMapMod
                             }
 
                         }
-                        Console.print("Finished Locating.");
+                        Console.print("Finished Locating All.");
                     }
 
                 }
