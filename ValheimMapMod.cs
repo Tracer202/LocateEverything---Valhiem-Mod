@@ -12,11 +12,11 @@ using System.Collections;
 
 namespace LocateEverything
 {
-    [BepInPlugin("Valheim Locate Map Mod", "Locate Everything", "1.0.0")]
+    [BepInPlugin("ValheimLocateMapMod", "Locate Everything", "1.0.0")]
     [BepInProcess("valheim.exe")]
     public class ValheimMapMod : BaseUnityPlugin
     {
-        private readonly Harmony harmony = new Harmony("Valheim Locate Map Mod");
+        private readonly Harmony harmony = new Harmony("ValheimLocateMapMod");
         public static List<ZoneLocation> test;
         public static ZoneSystem zs;
         public static Minimap mm;
@@ -215,7 +215,7 @@ namespace LocateEverything
                             {
                                 //Console.print(" Pin Already Exists");
                             }
-
+                             
                         }
                         Console.print("Finished Locating All.");
                     }
