@@ -2,6 +2,8 @@
 
 Mod to add pins for specified locations to the map. As a solo player, I was tired of spending hours just to find the next dungeon so I made my own mod to pin them. Pins added use the ping or 'None' icon to easily differentiate between user and mod created pins.
 
+Has Not Been Tested In Multiplayer
+
 *Note that capitalization does not matter*
 
 Press F5 to open the terminal. This mod uses the below commands (also found by typing in help):
@@ -16,3 +18,6 @@ Press F5 to open the terminal. This mod uses the below commands (also found by t
       - Mostly added as a joke as there are usually 10,070 ish locations created. Will drop your FPS (hasn't crash my computer yet) if you open your map and zoom out, but the Remove command works well to reset it if you want to try it out.
 
 Suggested usage: Use list locations to get the proper name for your desired location. Locate All to add them all to your map. Add a manual pin for the ones you're interested in visiting. Then Remove command to remove the mod added pins so only your manual ones are left over.
+
+
+1.0.1 - Removed space characters from ID
