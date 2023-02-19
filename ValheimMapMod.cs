@@ -12,7 +12,7 @@ using System.Collections;
 
 namespace LocateEverything
 {
-    [BepInPlugin("ValheimLocateMapMod", "Locate Everything", "1.0.0")]
+    [BepInPlugin("ValheimLocateMapMod", "Locate Everything", "1.0.1")]
     [BepInProcess("valheim.exe")]
     public class ValheimMapMod : BaseUnityPlugin
     {
