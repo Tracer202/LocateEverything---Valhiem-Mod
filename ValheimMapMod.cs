@@ -12,7 +12,7 @@ using System.Collections;
 
 namespace LocateEverything
 {
-    [BepInPlugin("ValheimLocateMapMod", "Locate Everything", "1.0.1")]
+    [BepInPlugin("ValheimLocateMapMod", "Locate Everything", "1.0.2")]
     [BepInProcess("valheim.exe")]
     public class ValheimMapMod : BaseUnityPlugin
     {
@@ -71,11 +71,11 @@ namespace LocateEverything
                 if (inputText.Contains("HELP"))
                 {
 
-                    Console.print("List Locations");
-                    Console.print("Locate Closest *location* ");
-                    Console.print("Locate All *location*");
-                    Console.print("Remove Everything Pins");
-                    Console.print("LOCATE EVERYTHING");
+                    Console.instance.Print("LocateEverything - Locate Closest *location* ");
+                    Console.instance.Print("LocateEverything - Locate Closest *location* ");
+                    Console.instance.Print("LocateEverything - Locate All *location*");
+                    Console.instance.Print("LocateEverything - Remove Everything Pins");
+                    Console.instance.Print("LocateEverything - LOCATE EVERYTHING");
                 }
                 else if (inputText.Equals("LIST LOCATIONS"))
                 {
@@ -91,7 +91,7 @@ namespace LocateEverything
                         if (prefabCount > 6)
                         {
                             prefabCount = 0;
-                            Console.print(consoleText.Trim(','));
+                            Console.instance.Print(consoleText.Trim(','));
                             consoleText = "";
 
                         }
@@ -104,11 +104,11 @@ namespace LocateEverything
                     if(dict.Count() == 0)
                     {
                         Player.m_localPlayer.Message(MessageHud.MessageType.Center, "Please close and re-open this World to initialize Locations");
-                        Console.print("Please close and re-open this World to initialize Locations");
+                        Console.instance.Print("Please close and re-open this World to initialize Locations");
                         return;
                     }
 
-                    Console.print("Locating all of these: " + dict.Count());
+                    Console.instance.Print("Locating all of these: " + dict.Count());
                     List<Vector3> ExistingPinPositions = new List<Vector3>();
                             
                     List<Minimap.PinData> MiniMapPinData = (List<Minimap.PinData>)Traverse.Create((object)Minimap.instance).Field("m_pins").GetValue(); //No idea how Traverse works but it does the job
@@ -121,16 +121,16 @@ namespace LocateEverything
                     foreach (Vector2i LI in dict.Keys)
                     {
                         Vector3 LocationPos = dict[LI].m_position;
-                        //Console.print(LI.ToString() + ", " + dict[LI] + ", " + LocationPos + ", " + dict[LI].m_location.m_prefabName);
+                        //Console.instance.Print(LI.ToString() + ", " + dict[LI] + ", " + LocationPos + ", " + dict[LI].m_location.m_prefabName);
 
                         if (!ExistingPinPositions.Contains(LocationPos))
                         {
                             mm.AddPin(LocationPos, PinType.None, dict[LI].m_location.m_prefabName, true, false);
-                            Console.print(" Pin Added at, " + LocationPos);
+                            Console.instance.Print(" Pin Added at, " + LocationPos);
                         }
                         else
                         {
-                            //Console.print(" Pin Already Exists");
+                            //Console.instance.Print(" Pin Already Exists");
                         }
 
                     }
@@ -139,7 +139,7 @@ namespace LocateEverything
                 }
                 else if (inputText.Equals("REMOVE EVERYTHING PINS"))
                 {
-                    Console.print("Start Removing");
+                    Console.instance.Print("Start Removing");
                     List<Minimap.PinData> MiniMapPinData = (List<Minimap.PinData>)Traverse.Create((object)Minimap.instance).Field("m_pins").GetValue(); //No idea how Traverse works but it does the job
                     List<PinData> RemovablePins = new List<PinData>();
                     foreach (PinData pin in MiniMapPinData)
@@ -153,7 +153,7 @@ namespace LocateEverything
                     {
                         mm.RemovePin(pin);
                     }
-                    Console.print("Finished Removing");
+                    Console.instance.Print("Finished Removing");
                 }
 
                // also add for th ehelp command
@@ -174,8 +174,8 @@ namespace LocateEverything
                 bool closest = inputText.StartsWith("LOCATE CLOSEST");
                 if ((closest || all) & PrefabNamesListUpper.Contains(PrefabName))
                 {
-                    
-                    Console.print("Locating...");
+
+                    Console.instance.Print("Locating...");
                     String OriginalPrefabName = OriginalPrefabNamesList[PrefabNamesListUpper.IndexOf(PrefabName)];
                     //String[] SplitText = inputText.Split(' ');
                     //String PrefabName = SplitText[1];
@@ -184,14 +184,14 @@ namespace LocateEverything
                     if (closest)
                     {
                         Game.instance.DiscoverClosestLocation(OriginalPrefabName, Player.m_localPlayer.transform.position, OriginalPrefabName, 8);
-                        Console.print(" Finished Discovering Closest.");
+                        Console.instance.Print(" Finished Discovering Closest.");
                     }
                     else if(all)
                     {
                         if (dict.Count() == 0)
                         {
                             Player.m_localPlayer.Message(MessageHud.MessageType.Center, "Please close and re-open this World to initialize Locations");
-                            Console.print("Please close and re-open this World to initialize Locations");
+                            Console.instance.Print("Please close and re-open this World to initialize Locations");
                             return;
                         }
                         List<Vector3> ExistingPinPositions = new List<Vector3>();
@@ -205,19 +205,19 @@ namespace LocateEverything
                         foreach (Vector2i LI in dict.Keys)
                         {
                             Vector3 LocationPos = dict[LI].m_position;
-                            //Console.print(LI.ToString() + ", " + dict[LI] + ", " + LocationPos + ", " + dict[LI].m_location.m_prefabName);
+                            //Console.instance.Print(LI.ToString() + ", " + dict[LI] + ", " + LocationPos + ", " + dict[LI].m_location.m_prefabName);
                             if (!ExistingPinPositions.Contains(LocationPos) & dict[LI].m_location.m_prefabName.Equals(OriginalPrefabName))
                             {
                                 mm.AddPin(LocationPos, PinType.None, dict[LI].m_location.m_prefabName, true, false);
-                                //Console.print(" Pin Added");
+                                //Console.instance.Print(" Pin Added");
                             }
                             else
                             {
-                                //Console.print(" Pin Already Exists");
+                                //Console.instance.Print(" Pin Already Exists");
                             }
-                             
+
                         }
-                        Console.print("Finished Locating All.");
+                        Console.instance.Print("Finished Locating All.");
                     }
 
                 }
