@@ -9,7 +9,7 @@ Press F5 to open the terminal. This mod uses the below commands (also found by t
   2. 'Locate Closest *location* - Adds a pin of the closest instance of that location to the map.
        - *location* refers to the locations listed in the List Lcoations command. These come directly from Valheim.
        - ex. 'locate closest vendor_blackforest' will add a pin for the merchant.
-  3. 'Locate All *location*' - Adds a pin for every instance of that lcoation. (Note that there can be anywere from 0-150 instances depending on type)
+  3. 'Locate All *location*' - Adds a pin for every instance of that location. (Note that there can be anywere from 0-150 instances depending on type)
   4. 'Remove Everything Pins' - Removes any pins created by the mod
       - Technically it removes any pins with the None icon type (looks like a yellow ping).
   5. 'Locate EVERYTHING' - Adds a pin for every location instance to the map. 
